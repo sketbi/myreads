@@ -6,7 +6,7 @@ import {BrowserRouter} from 'react-router-dom'
 import {Route} from 'react-router-dom';
 
 import SearchBooks from './SearchBooks';
-import ListMyBooks from './ListMyBooks';
+import ListBooks from './ListBooks';
 
 
 class BooksApp extends React.Component {
@@ -33,7 +33,7 @@ class BooksApp extends React.Component {
                   <SearchBooks books={this.state.books}/>
               )}/>
               <Route exact path='/' render={()=>(
-                  <ListMyBooks books={this.state.books}/>
+                  <ListBooks books={this.state.books}/>
               )}/>
           </div>
       </BrowserRouter>

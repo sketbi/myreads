@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import Proptypes from 'prop-types';
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by'
+import * as BooksAPI from './BooksAPI'
+
 import { Link } from 'react-router-dom';
 import BooksGrid from './BooksGrid';
 
@@ -10,31 +14,31 @@ class SearchBooks extends Component {
    }
 
   state = {
-    query: ''
+    query: '',
+    showingBooks : []
   }
 
   updateQuery = (query) => {
     this.setState({ query: query.trim() });
+    this.search(this.state.query);
   };
 
+  search = (query) => {
+    BooksAPI.search(query).then((showingBooks) => this.setState({showingBooks}));
+  };
+
+
   clearQueury = () => {
-    this.setState({ query: '' });
+    this.setState({ query: '',showingBooks : [] });
   };
 
   render() {
 
     const {books} = this.props;
-    const {query} = this.state;
-    
-    let showingBooks;
-    if(query){
-
-    }else{
-      showingBooks = [];
-    }
-    const resultFound = showingBooks.length > 0;
+    const {query,showingBooks} = this.state;
     return (
       <div className="search-books">
+        
         <div className="search-books-bar">
           <Link
             to='/'
@@ -49,12 +53,17 @@ class SearchBooks extends Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-            <input type="text" placeholder="Search by title or author" />
+            <input 
+              type="text" 
+              placeholder="Search by title or author" 
+              value={query}
+              onChange={(event) => this.updateQuery(event.target.value)}
+            />
 
           </div>
         </div>
         <div className="search-books-results">
-             <BooksGrid books={showingBooks}/>
+          {showingBooks.length  && <BooksGrid books={showingBooks}/>}
         </div>
       </div>
 

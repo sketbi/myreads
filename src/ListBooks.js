@@ -27,19 +27,25 @@ class ListBooks extends Component {
   render() {
     return (
       <div className="list-books">
-        {this.state.shelfs.filter(x => x.shelf != 'none').map((object, i) =>
-          <div key={i} className="bookshelf">
-            <h2 className="bookshelf-title">{object.displayName}</h2>
-            <div className="bookshelf-books">
-              <BooksGrid books={this.props.books.filter((x) => x.shelf == object.shelf)} />
+        <div className="list-books-title">
+          <h1>MyReads</h1>
+        </div>
+        <div className="list-books-content">
+          <div className="list-books">
+            {this.state.shelfs.filter(x => x.shelf != 'none').map((object, i) =>
+              <div key={i} className="bookshelf">
+                <h2 className="bookshelf-title">{object.displayName}</h2>
+                <div className="bookshelf-books">
+                  <BooksGrid books={this.props.books.filter((x) => x.shelf == object.shelf)} />
+                </div>
+              </div>
+            )}
+            <div className="open-search">
+              <Link to='/search'>Add Book</Link>
             </div>
           </div>
-        )}
-        <div className="open-search">
-          <Link to='/search'>Add Book</Link>
         </div>
       </div>
-
     )
   }
 
