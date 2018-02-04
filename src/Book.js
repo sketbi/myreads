@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 class Book extends Component {
 
   state = {
-    shelf: this.props.book.shelf
+    shelf: this.props.book.shelf ? this.props.book.shelf : 'none'
   }
 
 
@@ -27,7 +27,7 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{book.title}</div>
-        <div className="book-authors">{book.author} - {book.shelf}</div>
+        <div className="book-authors">{book.author}</div>
       </div>
     )
   }

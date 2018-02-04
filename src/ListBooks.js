@@ -3,8 +3,13 @@ import { Link } from 'react-router-dom';
 import BooksGrid from './BooksGrid';
 
 class ListBooks extends Component {
+  
   state = {
-    shelfs: [
+    
+  }
+
+  getShelf = () =>{
+     const shelfs = [
       {
         "shelf": "currentlyReading",
         "displayName": "Currently Reading"
@@ -16,12 +21,9 @@ class ListBooks extends Component {
       {
         "shelf": "read",
         "displayName": "Read"
-      },
-      {
-        "shelf": "none",
-        "displayName": "None"
       }
     ]
+    return shelfs
   }
 
   render() {
@@ -32,7 +34,7 @@ class ListBooks extends Component {
         </div>
         <div className="list-books-content">
           <div className="list-books">
-            {this.state.shelfs.filter(x => x.shelf != 'none').map((object, i) =>
+            {this.getShelf().map((object, i) =>
               <div key={i} className="bookshelf">
                 <h2 className="bookshelf-title">{object.displayName}</h2>
                 <div className="bookshelf-books">
