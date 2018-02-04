@@ -9,10 +9,6 @@ import BooksGrid from './BooksGrid';
 
 class SearchBooks extends Component {
 
-   static Proptypes ={
-     books: Proptypes.array.isRequired
-   }
-
   state = {
     query: '',
     showingBooks : []
@@ -20,50 +16,66 @@ class SearchBooks extends Component {
 
   updateQuery = (query) => {
     this.setState({ query: query.trim() });
-    this.search(this.state.query);
+    this.search();
   };
 
-  search = (query) => {
-    BooksAPI.search(query).then((showingBooks) => this.setState({showingBooks}));
-  };
+  search = () => {
+      let searchResult = [];
+      let resultFound ;
+      BooksAPI.search(this.state.query).then((searchResult) => {
+              console.log("searchResult ==> "+JSON.stringify(searchResult));
+              resultFound = searchResult && searchResult.length > 0;
+                    console.log("resultFound ==> "+resultFound);
+                        if(resultFound){
+        this.props.myBooks.map((book) =>{
+          console.log("book id==> "+book.id)
+           var objIndex = searchResult.findIndex((obj => obj.id == book.id));
+           console.log("objIndex => "+objIndex)
+           if(objIndex != -1 ){
+            searchResult[objIndex]["shelf"] = book.shelf;
+           }
+        }
+        
+        );
+        
+        this.setState({showingBooks:searchResult})
+      }
 
+ 
+      });
+  
 
-  clearQueury = () => {
-    this.setState({ query: '',showingBooks : [] });
-  };
+  }
 
   render() {
-
-    const {books} = this.props;
     const {query,showingBooks} = this.state;
+    let resultFound = showingBooks && showingBooks.length > 0;
+     console.log(showingBooks);
     return (
       <div className="search-books">
-        
+       
         <div className="search-books-bar">
+          
           <Link
             to='/'
             className='close-search'>
             Close Search</Link>
           <div className="search-books-input-wrapper">
-            {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-            <input 
-              type="text" 
-              placeholder="Search by title or author" 
-              value={query}
-              onChange={(event) => this.updateQuery(event.target.value)}
-            />
+           <input
+            className='search-contacts'
+            type='text'
+            placeholder='Search by Title or Author'
+            value={this.state.query}
+            onChange={(event) => this.updateQuery(event.target.value)}
+          />
 
           </div>
         </div>
         <div className="search-books-results">
-          {showingBooks.length  && <BooksGrid books={showingBooks}/>}
+          {
+            resultFound && (<BooksGrid books={showingBooks}  updateShelf={this.props.updateShelf}/>)
+          }
+            
         </div>
       </div>
 
