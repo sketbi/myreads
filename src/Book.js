@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 
 
 class Book extends Component {
-
   state = {
     shelf: this.props.book.shelf ? this.props.book.shelf : 'none'
   }
-
-
   render() {
     const {book} = this.props
     return (

@@ -23,29 +23,19 @@ class BooksApp extends React.Component {
    }
 
   updateShelf = (book,shelf) =>{
-   var objIndex = this.state.books.findIndex((obj => obj.id == book.id));
-    
+   // check if the book exist in state.books, if yes just update the shelf, if no add it to the state.
+    var objIndex = this.state.books.findIndex((obj => obj.id == book.id));
     if(objIndex == -1){
         var joined = this.state.books.concat(book);
-        this.setState({ books: joined }); 
+        this.setState({ books: joined });
+        objIndex = this.state.books.findIndex((obj => obj.id == book.id)); 
     }
-
     BooksAPI.update(book,shelf).then((res) => {
-         console.log("objIndex in updateShelf ==> "+objIndex)
-        // if object already exist update the shelf value, else add new book to my books
-         objIndex = this.state.books.findIndex((obj => obj.id == book.id));
-        if(objIndex != -1){
-            let booksCopy = JSON.parse(JSON.stringify(this.state.books))
-            booksCopy[objIndex].shelf = shelf;
-            this.setState({books : booksCopy});
-        }else{
-          console.log("cannot find the book");
-        }
+        let booksCopy = JSON.parse(JSON.stringify(this.state.books))
+        booksCopy[objIndex].shelf = shelf;
+        this.setState({books : booksCopy});
     });
   }
-
-
-
 
   render() {
     return (
