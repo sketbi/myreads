@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-
+import coverNotAviable from'./images/none.jpg';
 
 class Book extends Component {
   state = {
-    shelf: this.props.book.shelf ? this.props.book.shelf : 'none'
+    shelf: this.props.book.shelf ? this.props.book.shelf : 'none',
   }
   render() {
-    const {book} = this.props
+    const {book} = this.props;
+    let thumbnail = this.props.book.imageLinks.thumbnail;
+ 
+    if(thumbnail == ''){thumbnail = coverNotAviable;}
     return (
       <div className="book">
         <div className="book-top">
           <div className="book-cover"
-            style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail}` }}
+            style={{ width: 128, height: 193, backgroundImage: `url(${thumbnail})` }}
           ></div>
           <div className="book-shelf-changer">
             <select value={this.state.shelf} onChange={(event) => this.props.updateShelf(book, event.target.value)}>
