@@ -33,7 +33,7 @@ class BooksApp extends React.Component {
     
    BooksAPI.update(book,shelf).then((res) => {
         // if book does not exist, add it to booksCopy
-        if(objIndex == -1){
+        if(objIndex === -1){
             book["shelf"] = shelf;
             booksCopy.push(book);
             this.updateBooks(booksCopy);

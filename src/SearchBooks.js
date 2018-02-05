@@ -28,6 +28,8 @@ class SearchBooks extends Component {
             if (objIndex != -1) { searchResult[objIndex]["shelf"] = book.shelf; }
           });// end of myBooks.map
           this.setState({ showingBooks: searchResult })
+      }else{
+        this.setState({showingBooks:[]});
       }// end of if resultFound 
     }); // end of BooksAPI.search
   }// end of search
