@@ -14,29 +14,35 @@ class BooksApp extends React.Component {
       books : []
   }
 
+  updateBooks = (books) =>{
+      this.setState({books});
+  }
+
  componentDidMount() {
    this.getBooks();
   } // end of componentDidMount
 
    getBooks = () =>{
-        BooksAPI.getAll().then((books) => this.setState({books}));
+        BooksAPI.getAll().then((books) => this.updateBooks(books));
    }
 
   updateShelf = (book,shelf) =>{
    // check if the book exist in state.books, if yes just update the shelf, if no add it to the state.
-    var objIndex = this.state.books.findIndex((obj => obj.id == book.id));
-    if(objIndex == -1){
-        var joined = this.state.books.concat(book);
-        this.setState({ books: joined });
-        objIndex = this.state.books.findIndex((obj => obj.id == book.id)); 
-    }
-    BooksAPI.update(book,shelf).then((res) => {
-        let booksCopy = JSON.parse(JSON.stringify(this.state.books))
-        booksCopy[objIndex].shelf = shelf;
-        this.setState({books : booksCopy});
+   var objIndex = this.state.books.findIndex((obj => obj.id == book.id));
+   let booksCopy = JSON.parse(JSON.stringify(this.state.books));
+    
+   BooksAPI.update(book,shelf).then((res) => {
+        // if book does not exist, add it to booksCopy
+        if(objIndex == -1){
+            book["shelf"] = shelf;
+            booksCopy.push(book);
+            this.updateBooks(booksCopy);
+        }else{
+            booksCopy[objIndex]["shelf"] = shelf;
+            this.updateBooks(booksCopy);
+        }    
     });
   }
-
   render() {
     return (
       <BrowserRouter>

@@ -13,8 +13,9 @@ class SearchBooks extends Component {
   }
 
   updateQuery = (query) => {
-    this.setState({ query: query.trim() });
-    this.search();
+    this.setState({ query: query.trim()},()=>{
+      this.search();
+    });
   };
 
   search = () => {
@@ -22,11 +23,11 @@ class SearchBooks extends Component {
     BooksAPI.search(this.state.query).then((searchResult) => {
       let resultFound = searchResult && searchResult.length > 0;
       if (resultFound) {
-        this.props.myBooks.map((book) => {
-          var objIndex = searchResult.findIndex((obj => obj.id == book.id));
-          if (objIndex != -1) { searchResult[objIndex]["shelf"] = book.shelf; }
-        });// end of myBooks.map
-        this.setState({ showingBooks: searchResult })
+          this.props.myBooks.map((book) => {
+            var objIndex = searchResult.findIndex((obj => obj.id == book.id));
+            if (objIndex != -1) { searchResult[objIndex]["shelf"] = book.shelf; }
+          });// end of myBooks.map
+          this.setState({ showingBooks: searchResult })
       }// end of if resultFound 
     }); // end of BooksAPI.search
   }// end of search
