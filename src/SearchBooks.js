@@ -12,27 +12,55 @@ class SearchBooks extends Component {
   }
 
   updateQuery = (query) => {
-    this.setState({ query: query},()=>{
+    this.setState({ 
+      query: query},()=>{
       this.search();
     });
   };
 
+  updateShowingBooks = (result) =>{
+    this.setState({
+      showingBooks : result
+    });
+  }
+  updateShelf = (book,shelf)=>{
+    this.props.updateShelf(book,shelf);
+    // check if the book exist in state.books, if yes just update the shelf, if no add it to the state.
+   var objIndex = this.state.showingBooks.findIndex((obj => obj.id === book.id));
+   let showingBooksCopy = JSON.parse(JSON.stringify(this.state.showingBooks));
+   showingBooksCopy[objIndex]["shelf"] = shelf;
+   this.updateShowingBooks(showingBooksCopy);
+
+  };
+
+
   search = () => {
-    if(this.state.query !== ""){
-        BooksAPI.search(this.state.query).then((searchResult) => {
+    if(this.state.query !== ''){
+      const booksLength = this.props.books ? this.props.books.length : 0;
+        
+      BooksAPI.search(this.state.query).then((searchResult) => {
           let resultFound = searchResult && searchResult.length > 0;
+          let updateAllBooks = booksLength === 0;
           if (resultFound) {
-            this.props.books.forEach(function (book){ 
+            var bookCounter = 0;
+            this.props.books.forEach(function (book){
+              bookCounter++;
                 var objIndex = searchResult.findIndex((obj => obj.id === book.id));
                 if (objIndex !== -1) { 
-                  searchResult[objIndex]["shelf"] = book.shelf;
+                  searchResult[objIndex].shelf = book.shelf;
+                }
+                if(bookCounter === booksLength){
+                  updateAllBooks = true;
                 } //book.shelf; 
-            }); // end of forEach
-            this.setState({ showingBooks: searchResult });
+            });// end of forEach
+            if(updateAllBooks){
+              this.setState({showingBooks:searchResult});
+            }
           }else{
             this.setState({showingBooks:[]});
           }// end of if resultFound 
         }); // end of BooksAPI.search
+
     }else{
       this.setState({showingBooks:[]});
     }
@@ -58,7 +86,7 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          {resultFound && (<BooksGrid books={showingBooks} updateShelf={this.props.updateShelf} />)}
+          {resultFound && (<BooksGrid books={showingBooks} updateShelf={this.updateShelf} />)}
         </div>
       </div>
     )

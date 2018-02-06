@@ -31,7 +31,6 @@ class BooksApp extends React.Component {
    // check if the book exist in state.books, if yes just update the shelf, if no add it to the state.
    var objIndex = this.state.books.findIndex((obj => obj.id === book.id));
    let booksCopy = JSON.parse(JSON.stringify(this.state.books));
-    
    BooksAPI.update(book,shelf).then((res) => {
         // if book does not exist, add it to booksCopy
         if(objIndex === -1){

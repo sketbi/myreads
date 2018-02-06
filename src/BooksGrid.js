@@ -5,9 +5,9 @@ class BooksGrid extends Component {
   render() {
     return (
       <ol className="books-grid">        
-        {this.props.books.map((book, i) =>
+        {this.props.books.map((myBook, i) =>
           <li key={i}>
-               <Book book={book} updateShelf={this.props.updateShelf}/>
+               <Book book={myBook} shelf={myBook.shelf ? myBook.shelf : 'none'} updateShelf={this.props.updateShelf}/>
           </li>
         )}
       </ol>
