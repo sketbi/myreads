@@ -3,10 +3,11 @@ import * as BooksAPI from './BooksAPI'
 
 import './App.css'
 import {BrowserRouter} from 'react-router-dom'
-import {Route} from 'react-router-dom';
+import {Switch,Route} from 'react-router-dom';
 
 import SearchBooks from './SearchBooks';
 import ListBooks from './ListBooks';
+import NoMatch from './NoMatch';
 
 
 class BooksApp extends React.Component {
@@ -47,12 +48,15 @@ class BooksApp extends React.Component {
     return (
       <BrowserRouter>
           <div className="app">
-              <Route exact path='/search'  render={()=>(
-                  <SearchBooks  books={this.state.books} updateShelf={this.updateShelf}/>
-              )}/>
-              <Route exact path='/' render={()=>(
-                  <ListBooks books={this.state.books} updateShelf={this.updateShelf}/>
-              )}/>
+            <Switch>
+                <Route exact path='/search'  render={()=>(
+                    <SearchBooks  books={this.state.books} updateShelf={this.updateShelf}/>
+                )}/>
+                <Route exact path='/' render={()=>(
+                    <ListBooks books={this.state.books} updateShelf={this.updateShelf}/>
+                )}/>
+                <Route component={NoMatch}/>
+            </Switch>
           </div>
       </BrowserRouter>
 

@@ -5,8 +5,8 @@ class BooksGrid extends Component {
   render() {
     return (
       <ol className="books-grid">        
-        {this.props.books.map((myBook, i) =>
-          <li key={i}>
+        {this.props.books.map((myBook,index) =>
+          <li key={'myBook' + index}>
                <Book book={myBook} shelf={myBook.shelf ? myBook.shelf : 'none'} updateShelf={this.props.updateShelf}/>
           </li>
         )}
