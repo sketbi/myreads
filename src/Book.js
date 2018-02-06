@@ -5,13 +5,10 @@ class Book extends Component {
   state = {
     shelf: this.props.book.shelf ? this.props.book.shelf : 'none',
   }
-  
   updateShelf = (shelf) =>{
     this.setState({shelf});
     this.props.updateShelf(this.props.book,shelf);
   }
-
-
   render() {
     const {book} = this.props;
     let thumbnail = this.props.book.imageLinks ? this.props.book.imageLinks.thumbnail : coverNotAvailable;
