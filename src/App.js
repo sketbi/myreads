@@ -19,7 +19,8 @@ class BooksApp extends React.Component {
   }
 
  componentDidMount() {
-   this.getBooks();
+    BooksAPI.getAll().then((books) => this.setState({books}));
+
   } // end of componentDidMount
 
    getBooks = () =>{
@@ -28,7 +29,7 @@ class BooksApp extends React.Component {
 
   updateShelf = (book,shelf) =>{
    // check if the book exist in state.books, if yes just update the shelf, if no add it to the state.
-   var objIndex = this.state.books.findIndex((obj => obj.id == book.id));
+   var objIndex = this.state.books.findIndex((obj => obj.id === book.id));
    let booksCopy = JSON.parse(JSON.stringify(this.state.books));
     
    BooksAPI.update(book,shelf).then((res) => {
@@ -48,7 +49,7 @@ class BooksApp extends React.Component {
       <BrowserRouter>
           <div className="app">
               <Route exact path='/search'  render={()=>(
-                  <SearchBooks updateShelf={this.updateShelf} myBooks={this.state.books}/>
+                  <SearchBooks  books={this.state.books} updateShelf={this.updateShelf}/>
               )}/>
               <Route exact path='/' render={()=>(
                   <ListBooks books={this.state.books} updateShelf={this.updateShelf}/>

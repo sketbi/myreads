@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Proptypes from 'prop-types';
 import * as BooksAPI from './BooksAPI'
 
 import { Link } from 'react-router-dom';
@@ -13,25 +12,30 @@ class SearchBooks extends Component {
   }
 
   updateQuery = (query) => {
-    this.setState({ query: query.trim()},()=>{
+    this.setState({ query: query},()=>{
       this.search();
     });
   };
 
   search = () => {
-    let searchResult = [];
-    BooksAPI.search(this.state.query).then((searchResult) => {
-      let resultFound = searchResult && searchResult.length > 0;
-      if (resultFound) {
-          this.props.myBooks.map((book) => {
-            var objIndex = searchResult.findIndex((obj => obj.id == book.id));
-            if (objIndex != -1) { searchResult[objIndex]["shelf"] = book.shelf; }
-          });// end of myBooks.map
-          this.setState({ showingBooks: searchResult })
-      }else{
-        this.setState({showingBooks:[]});
-      }// end of if resultFound 
-    }); // end of BooksAPI.search
+    if(this.state.query !== ""){
+        BooksAPI.search(this.state.query).then((searchResult) => {
+          let resultFound = searchResult && searchResult.length > 0;
+          if (resultFound) {
+            this.props.books.forEach(function (book){ 
+                var objIndex = searchResult.findIndex((obj => obj.id === book.id));
+                if (objIndex !== -1) { 
+                  searchResult[objIndex]["shelf"] = book.shelf;
+                } //book.shelf; 
+            }); // end of forEach
+            this.setState({ showingBooks: searchResult });
+          }else{
+            this.setState({showingBooks:[]});
+          }// end of if resultFound 
+        }); // end of BooksAPI.search
+    }else{
+      this.setState({showingBooks:[]});
+    }
   }// end of search
 
   render() {
@@ -46,10 +50,9 @@ class SearchBooks extends Component {
             Close Search</Link>
           <div className="search-books-input-wrapper">
             <input
-              className='search-contacts'
               type='text'
               placeholder='Search by Title or Author'
-              value={this.state.query}
+              value={query}
               onChange={(event) => this.updateQuery(event.target.value)}
             />
           </div>

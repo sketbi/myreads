@@ -5,11 +5,18 @@ class Book extends Component {
   state = {
     shelf: this.props.book.shelf ? this.props.book.shelf : 'none',
   }
+  
+  updateShelf = (shelf) =>{
+    this.setState({shelf});
+    this.props.updateShelf(this.props.book,shelf);
+  }
+
+
   render() {
     const {book} = this.props;
     let thumbnail = this.props.book.imageLinks.thumbnail;
  
-    if(thumbnail == ''){thumbnail = coverNotAviable;}
+    if(thumbnail === ''){thumbnail = coverNotAviable;}
     return (
       <div className="book">
         <div className="book-top">
@@ -17,8 +24,8 @@ class Book extends Component {
             style={{ width: 128, height: 193, backgroundImage: `url(${thumbnail})` }}
           ></div>
           <div className="book-shelf-changer">
-            <select value={this.state.shelf} onChange={(event) => this.props.updateShelf(book, event.target.value)}>
-              <option value="none" disabled>Move to...</option>
+            <select value={this.state.shelf} onChange={(event) => this.updateShelf(event.target.value)}>
+              <option value="" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
               <option value="read">Read</option>
@@ -27,7 +34,7 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{book.title}</div>
-        <div className="book-authors">{book.author}</div>
+        <div className="book-authors">{Array.isArray(book.authors)?book.authors.join(', '):''}</div>
       </div>
     )
   }

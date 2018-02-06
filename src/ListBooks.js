@@ -35,7 +35,7 @@ class ListBooks extends Component {
                 <h2 className="bookshelf-title">{object.displayName}</h2>
                 <div className="bookshelf-books">
                   <BooksGrid
-                      books={this.props.books.filter((x) => x.shelf == object.shelf)}
+                      books={this.props.books.filter((x) => x.shelf === object.shelf)}
                       updateShelf={this.props.updateShelf}
                      />
                 </div>
