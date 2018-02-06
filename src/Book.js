@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import coverNotAviable from'./images/none.jpg';
+import coverNotAvailable from'./images/none.jpg';
 
 class Book extends Component {
   state = {
@@ -14,9 +14,9 @@ class Book extends Component {
 
   render() {
     const {book} = this.props;
-    let thumbnail = this.props.book.imageLinks.thumbnail;
+    let thumbnail = this.props.book.imageLinks ? this.props.book.imageLinks.thumbnail : coverNotAvailable;
  
-    if(thumbnail === ''){thumbnail = coverNotAviable;}
+    if(thumbnail === ''){thumbnail = coverNotAvailable;}
     return (
       <div className="book">
         <div className="book-top">
